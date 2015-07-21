@@ -1,2 +1,2 @@
 # PyTMM
-Transfer Matrix Method implemetation &amp; RefractiveIndex.info database browser
+Transfer Matrix Method implementation &amp; RefractiveIndex.info database browser
