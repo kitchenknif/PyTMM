@@ -59,14 +59,15 @@ class RefractiveIndex:
         # FIXME:There MUST be a way to access an elements w/o iterating over the whole damn dictionary.
         for sh in self.catalog:
             if sh['SHELF'] == shelf:
-                for b in sh['books']:
-                    if not 'divider' in b:
+                for b in sh['content']:
+                    if not 'DIVIDER' in b:
                         if b['BOOK'] == book:
-                            for p in b['pages']:
-                                if p['PAGE'] == page:
-                                    # print("From {0} opening {1}, {2}\n".format(sh['name'], b['name'], p['name']))
-                                    filename =os.path.join(self.referencePath, os.path.normpath(p['path']))
-                                    # print("Located at {}".format(filename))
+                            for p in b['content']:
+                                if not 'DIVIDER' in p:
+                                    if p['PAGE'] == page:
+                                        # print("From {0} opening {1}, {2}\n".format(sh['name'], b['name'], p['name']))
+                                        filename =os.path.join(self.referencePath, os.path.normpath(p['path']))
+                                        # print("Located at {}".format(filename))
         assert filename != ''
         return filename
     def getMaterial(self, shelf, book, page):
