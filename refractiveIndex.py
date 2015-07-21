@@ -31,7 +31,7 @@ class RefractiveIndex:
 
     def __init__(self, databasePath=os.path.join(os.path.dirname(os.path.realpath(__file__)), os.path.normpath("../RefractiveIndex/"))):
         self.referencePath = os.path.normpath(databasePath)
-        f = open(os.path.join(self.referencePath, os.path.normpath("catalog.yml")), "r")
+        f = open(os.path.join(self.referencePath, os.path.normpath("library.yml")), "r")
         # print(f)
         self.catalog = yaml.safe_load(f)
         f.close()
