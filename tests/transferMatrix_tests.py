@@ -20,7 +20,7 @@ from transferMatrix import *
 import matplotlib.pyplot as plt
 from refractiveIndex import *
 
-catalog = RefractiveIndex("..\RefractiveIndex")
+catalog = RefractiveIndex()
 si = catalog.getMaterial('main', 'Si', 'Aspnes')
 
 r, t = [], []
@@ -30,7 +30,8 @@ r3, t3 = [], []
 
 
 #single layer
-for i in range(100, 900):
+wavelengths = numpy.linspace(100, 900, num=2000)
+for i in wavelengths:
     a = TransferMatrix.layer(1.46, 2000, i)
     b = TransferMatrix.layer(1.46-0.001j, 2000, i)
     c = TransferMatrix.layer(1.46-0.01j, 2000, i)
@@ -54,9 +55,9 @@ for i in range(100, 900):
 
     #R = numpy.abs(res3[1]-res1[1])
 
-plt.plot(range(100, 900), r)
-plt.plot(range(100, 900), r1)
-plt.plot(range(100, 900), r2)
-plt.plot(range(100, 900), r3)
+plt.plot(wavelengths, r)
+plt.plot(wavelengths, r1)
+plt.plot(wavelengths, r2)
+plt.plot(wavelengths, r3)
 plt.legend(['1.46', '1.46-0.001j', '1.46-0.01j', '1.46-0.1j'])
 plt.show()
