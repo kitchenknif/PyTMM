@@ -17,7 +17,6 @@
 #   Copyright 2014-2015 Pavel Dmitriev <pavel.a.dmitriev@gmail.com>
 
 
-
 import numpy
 
 
