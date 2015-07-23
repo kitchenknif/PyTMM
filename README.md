@@ -36,5 +36,6 @@ Examples of using the transferMatrix module can be found in
 
 ###Dependencies
 - numpy
+- scipy
 - pyyaml
 - matplotlib (for plotting)
