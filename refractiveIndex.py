@@ -30,6 +30,10 @@ class RefractiveIndex:
     """Class that parses the refractiveindex.info YAML database"""
 
     def __init__(self, databasePath=os.path.join(os.path.dirname(os.path.realpath(__file__)), os.path.normpath("../RefractiveIndex/"))):
+        """
+
+        :param databasePath:
+        """
         self.referencePath = os.path.normpath(databasePath)
         f = open(os.path.join(self.referencePath, os.path.normpath("library.yml")), "r")
         # print(f)
@@ -55,6 +59,13 @@ class RefractiveIndex:
         #         book.pages = pages
 
     def getMaterialFilename(self, shelf, book, page):
+        """
+
+        :param shelf:
+        :param book:
+        :param page:
+        :return:
+        """
         filename = ''
         # FIXME:There MUST be a way to access an elements w/o iterating over the whole damn dictionary.
         for sh in self.catalog:
@@ -71,6 +82,13 @@ class RefractiveIndex:
         assert filename != ''
         return filename
     def getMaterial(self, shelf, book, page):
+        """
+
+        :param shelf:
+        :param book:
+        :param page:
+        :return:
+        """
         return Material(self.getMaterialFilename(shelf, book, page))
 
 
@@ -78,6 +96,10 @@ class Material:
     """ Material class"""
 
     def __init__(self, filename):
+        """
+
+        :param filename:
+        """
         self.refractiveIndex = None
         self.extinctionCoefficient = None
 
@@ -136,12 +158,22 @@ class Material:
                                                                                 coefficients=coefficents)
 
     def getRefractiveIndex(self, wavelength):
+        """
+
+        :param wavelength:
+        :return: :raise Exception:
+        """
         if self.refractiveIndex is None:
             raise Exception('No refractive index specified for this material')
         else:
             return self.refractiveIndex.getRefractiveIndex(wavelength)
 
     def getExtinctionCoefficient(self, wavelength):
+        """
+
+        :param wavelength:
+        :return: :raise NoExtinctionCoefficient:
+        """
         if self.extinctionCoefficient is None:
             raise NoExtinctionCoefficient('No extinction coefficient specified for this material')
         else:
@@ -155,6 +187,12 @@ class RefractiveIndexData:
 
     @staticmethod
     def setupRefractiveIndex(formula, **kwargs):
+        """
+
+        :param formula:
+        :param kwargs:
+        :return: :raise Exception:
+        """
         if formula >= 0:
             return FormulaRefractiveIndexData(formula, **kwargs)
         elif formula == -1:
@@ -163,6 +201,11 @@ class RefractiveIndexData:
             raise Exception('Bad RefractiveIndex data type')
 
     def getRefractiveIndex(self, wavelength):
+        """
+
+        :param wavelength:
+        :raise NotImplementedError:
+        """
         raise NotImplementedError('Different for functionally and experimentally defined materials')
 
 
@@ -170,12 +213,24 @@ class FormulaRefractiveIndexData:
     """Formula RefractiveIndex class"""
 
     def __init__(self, formula, rangeMin, rangeMax, coefficients):
+        """
+
+        :param formula:
+        :param rangeMin:
+        :param rangeMax:
+        :param coefficients:
+        """
         self.formula = formula
         self.rangeMin = rangeMin
         self.rangeMax = rangeMax
         self.coefficients = coefficients
 
     def getRefractiveIndex(self, wavelength):
+        """
+
+        :param wavelength:
+        :return: :raise Exception:
+        """
         wavelength /= 1000.0
         if self.rangeMin <= wavelength <= self.rangeMax:
             type = self.formula
@@ -229,6 +284,11 @@ class TabulatedRefractiveIndexData:
     """Tabulated RefractiveIndex class"""
 
     def __init__(self, wavelengths, values):
+        """
+
+        :param wavelengths:
+        :param values:
+        """
         self.rangeMin = numpy.min(wavelengths)
         self.rangeMax = numpy.max(wavelengths)
 
@@ -238,6 +298,11 @@ class TabulatedRefractiveIndexData:
             self.refractiveFunction = scipy.interpolate.interp1d(wavelengths, values)
 
     def getRefractiveIndex(self, wavelength):
+        """
+
+        :param wavelength:
+        :return: :raise Exception:
+        """
         wavelength /= 1000.0
         if self.rangeMin == self.rangeMax and self.rangeMin == wavelength:
             return self.refractiveFunction
@@ -254,14 +319,30 @@ class ExtinctionCoefficientData:
 
     @staticmethod
     def setupExtinctionCoefficient(wavelengths, values):
+        """
+
+        :param wavelengths:
+        :param values:
+        :return:
+        """
         return ExtinctionCoefficientData(wavelengths, values)
 
     def __init__(self, wavelengths, coefficients):
+        """
+
+        :param wavelengths:
+        :param coefficients:
+        """
         self.extCoeffFunction = scipy.interpolate.interp1d(wavelengths, coefficients)
         self.rangeMin = numpy.min(wavelengths)
         self.rangeMax = numpy.max(wavelengths)
 
     def getExtinctionCoefficient(self, wavelength):
+        """
+
+        :param wavelength:
+        :return: :raise Exception:
+        """
         wavelength /= 1000.0
         if self.rangeMin <= wavelength <= self.rangeMax:
             return self.extCoeffFunction(wavelength)
