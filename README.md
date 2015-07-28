@@ -1,5 +1,5 @@
 # PyTMM
-Transfer Matrix Method implementation &amp; RefractiveIndex.info database browser
+Transfer Matrix Method implementation &amp; RefractiveIndex.info database (2015-05-24) browser
 
 ## Installation &amp; Basic Usage
 By default the RefractiveIndex module thinks that it is installed side-by-side with the RefractiveIndex.info database:
@@ -36,5 +36,6 @@ Examples of using the transferMatrix module can be found in
 
 ###Dependencies
 - numpy
+- scipy
 - pyyaml
 - matplotlib (for plotting)
