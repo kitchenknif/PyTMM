@@ -23,13 +23,16 @@ import sys
 import argparse
 import numpy
 import scipy.interpolate
-#import collections
+
+
+# import collections
 
 
 class RefractiveIndex:
     """Class that parses the refractiveindex.info YAML database"""
 
-    def __init__(self, databasePath=os.path.join(os.path.dirname(os.path.realpath(__file__)), os.path.normpath("../RefractiveIndex/"))):
+    def __init__(self, databasePath=os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                                 os.path.normpath("../RefractiveIndex/"))):
         """
 
         :param databasePath:
@@ -71,16 +74,17 @@ class RefractiveIndex:
         for sh in self.catalog:
             if sh['SHELF'] == shelf:
                 for b in sh['content']:
-                    if not 'DIVIDER' in b:
+                    if 'DIVIDER' not in b:
                         if b['BOOK'] == book:
                             for p in b['content']:
-                                if not 'DIVIDER' in p:
+                                if 'DIVIDER' not in p:
                                     if p['PAGE'] == page:
                                         # print("From {0} opening {1}, {2}\n".format(sh['name'], b['name'], p['name']))
-                                        filename =os.path.join(self.referencePath, os.path.normpath(p['path']))
+                                        filename = os.path.join(self.referencePath, os.path.normpath(p['path']))
                                         # print("Located at {}".format(filename))
         assert filename != ''
         return filename
+
     def getMaterial(self, shelf, book, page):
         """
 
@@ -179,6 +183,7 @@ class Material:
         else:
             return self.extinctionCoefficient.getExtinctionCoefficient(wavelength)
 
+
 #
 # Refractive Index
 #
@@ -233,51 +238,53 @@ class FormulaRefractiveIndexData:
         """
         wavelength /= 1000.0
         if self.rangeMin <= wavelength <= self.rangeMax:
-            type = self.formula
+            formula_type = self.formula
             coefficients = self.coefficients
             n = 0
-            if type == 1:  # Sellmeier
+            if formula_type == 1:  # Sellmeier
                 nsq = 1 + coefficients[0]
-                g = lambda c1, c2, w: c1*(w**2)/(w**2 - c2**2)
+                g = lambda c1, c2, w: c1 * (w ** 2) / (w ** 2 - c2 ** 2)
                 for i in range(1, len(coefficients), 2):
                     nsq += g(coefficients[i], coefficients[i + 1], wavelength)
                 n = numpy.sqrt(nsq)
-            elif type == 2:  # Sellmeier-2
+            elif formula_type == 2:  # Sellmeier-2
                 nsq = 1 + coefficients[0]
-                g = lambda c1, c2, w: c1*(w**2)/(w**2 - c2)
+                g = lambda c1, c2, w: c1 * (w ** 2) / (w ** 2 - c2)
                 for i in range(1, len(coefficients), 2):
                     nsq += g(coefficients[i], coefficients[i + 1], wavelength)
                 n = numpy.sqrt(nsq)
-            elif type == 3:  # Polynomal
-                g = lambda c1, c2, w: c1*w**c2
+            elif formula_type == 3:  # Polynomal
+                g = lambda c1, c2, w: c1 * w ** c2
                 nsq = coefficients[0]
                 for i in range(1, len(coefficients), 2):
                     nsq += g(coefficients[i], coefficients[i + 1], wavelength)
                 n = numpy.sqrt(nsq)
-            elif type == 4:  # RefractiveIndex.INFO
+            elif formula_type == 4:  # RefractiveIndex.INFO
                 raise FormulaNotImplemented('RefractiveIndex.INFO formula not yet implemented')
-            elif type == 5:  # Cauchy
-                g = lambda c1, c2, w: c1*w**c2
+            elif formula_type == 5:  # Cauchy
+                g = lambda c1, c2, w: c1 * w ** c2
                 n = coefficients[0]
                 for i in range(1, len(coefficients), 2):
                     n += g(coefficients[i], coefficients[i + 1], wavelength)
-            elif type == 6:  # Gasses
+            elif formula_type == 6:  # Gasses
                 n = 1 + coefficients[0]
-                g = lambda c1, c2, w: c1/(c2 - w**(-2))
+                g = lambda c1, c2, w: c1 / (c2 - w ** (-2))
                 for i in range(1, len(coefficients), 2):
                     n += g(coefficients[i], coefficients[i + 1], wavelength)
-            elif type == 7:  # Herzberger
+            elif formula_type == 7:  # Herzberger
                 raise FormulaNotImplemented('Herzberger formula not yet implemented')
-            elif type == 8:  # Retro
+            elif formula_type == 8:  # Retro
                 raise FormulaNotImplemented('Retro formula not yet implemented')
-            elif type == 9:  # Exotic
+            elif formula_type == 9:  # Exotic
                 raise FormulaNotImplemented('Exotic formula not yet implemented')
             else:
                 raise Exception('Bad formula type')
 
             return n
         else:
-            raise Exception('Wavelength {} is out of bounds. Correct range(um): ({}, {})'.format(wavelength, self.rangeMin, self.rangeMax))
+            raise Exception(
+                'Wavelength {} is out of bounds. Correct range(um): ({}, {})'.format(wavelength, self.rangeMin,
+                                                                                     self.rangeMax))
 
 
 class TabulatedRefractiveIndexData:
@@ -309,7 +316,10 @@ class TabulatedRefractiveIndexData:
         elif self.rangeMin <= wavelength <= self.rangeMax and self.rangeMin != self.rangeMax:
             return self.refractiveFunction(wavelength)
         else:
-            raise Exception('Wavelength {} is out of bounds. Correct range(um): ({}, {})'.format(wavelength, self.rangeMin, self.rangeMax))
+            raise Exception(
+                'Wavelength {} is out of bounds. Correct range(um): ({}, {})'.format(wavelength, self.rangeMin,
+                                                                                     self.rangeMax))
+
 
 #
 # Extinction Coefficient
@@ -347,7 +357,9 @@ class ExtinctionCoefficientData:
         if self.rangeMin <= wavelength <= self.rangeMax:
             return self.extCoeffFunction(wavelength)
         else:
-            raise Exception('Wavelength {} is out of bounds. Correct range(um): ({}, {})'.format(wavelength, self.rangeMin, self.rangeMax))
+            raise Exception(
+                'Wavelength {} is out of bounds. Correct range(um): ({}, {})'.format(wavelength, self.rangeMin,
+                                                                                     self.rangeMax))
 
 
 #

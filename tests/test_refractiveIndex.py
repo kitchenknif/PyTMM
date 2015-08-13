@@ -22,7 +22,6 @@ from refractiveIndex import *
 
 
 class TestRefractiveIndex(TestCase):
-
     def test_defaultInit(self):
         database = RefractiveIndex()
         assert os.path.exists(database.referencePath)
@@ -33,9 +32,9 @@ class TestRefractiveIndex(TestCase):
         database = RefractiveIndex()
         for sh in database.catalog:
             for b in sh['content']:
-                if not 'DIVIDER' in b:
+                if 'DIVIDER' not in b:
                     for p in b['content']:
-                        if not 'DIVIDER' in p:
+                        if 'DIVIDER' not in p:
                             mat = database.getMaterialFilename(sh['SHELF'], b['BOOK'], p['PAGE'])
                             assert os.path.exists(os.path.normpath(mat))
                             assert os.path.isfile(os.path.normpath(mat))
@@ -44,13 +43,13 @@ class TestRefractiveIndex(TestCase):
         database = RefractiveIndex()
         for sh in database.catalog:
             for b in sh['content']:
-                if not 'DIVIDER' in b:
+                if 'DIVIDER' not in b:
                     for p in b['content']:
-                        if not 'DIVIDER' in p:
+                        if 'DIVIDER' not in p:
                             try:
-                                matFile = database.getMaterialFilename(sh['SHELF'], b['BOOK'], p['PAGE'])
+                                matfile = database.getMaterialFilename(sh['SHELF'], b['BOOK'], p['PAGE'])
                                 mat = database.getMaterial(sh['SHELF'], b['BOOK'], p['PAGE'])
                             except Exception as err:
-                                print(matFile)
+                                print(matfile)
                                 print(err)
                                 raise err

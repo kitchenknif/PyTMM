@@ -22,12 +22,12 @@ from refractiveIndex import *
 catalog = RefractiveIndex()
 mat = catalog.getMaterial('other', 'pmma_resists', 'Microchem495')
 print(mat.getRefractiveIndex(500))
-#f = open('Hass.yml')
-#a = yaml.safe_load(f)
-#f.close()
-#print(a)
+# f = open('Hass.yml')
+# a = yaml.safe_load(f)
+# f.close()
+# print(a)
 
-#print(mat.getExtincionCoefficient(500))
+# print(mat.getExtincionCoefficient(500))
 
 
 #
@@ -36,16 +36,18 @@ print(mat.getRefractiveIndex(500))
 i = 0
 for sh in catalog.catalog:
     for b in sh['content']:
-        if not 'DIVIDER' in b:
+        if 'DIVIDER' not in b:
             for p in b['content']:
-                if not 'DIVIDER' in p:
+                if 'DIVIDER' not in p:
                     try:
                         mat = catalog.getMaterial(sh['SHELF'], b['BOOK'], p['PAGE'])
-                        a = mat.getRefractiveIndex((mat.refractiveIndex.rangeMin + mat.refractiveIndex.rangeMax)*1000.0/2)
-                        #b = mat.getExtinctionCoefficient((mat.extinctionCoefficient.rangeMin + mat.extinctionCoefficient.rangeMax)*1000.0/2)
-                    except (FormulaNotImplemented):
+                        a = mat.getRefractiveIndex(
+                            (mat.refractiveIndex.rangeMin + mat.refractiveIndex.rangeMax) * 1000.0 / 2)
+                        # b = mat.getExtinctionCoefficient((mat.extinctionCoefficient.rangeMin
+                        #       + mat.extinctionCoefficient.rangeMax)*1000.0/2)
+                    except FormulaNotImplemented:
                         pass
-                    except (NoExtinctionCoefficient):
+                    except NoExtinctionCoefficient:
                         pass
                     except (Exception, NotImplementedError) as inst:
                         print("caught exception in {}".format(p['path']))
