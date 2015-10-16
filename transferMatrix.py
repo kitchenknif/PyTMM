@@ -52,15 +52,13 @@ class TransferMatrix:
         :param d:
         :param wavelength:
         """
-        bottomBoundary = numpy.array([[(1 + n) / (2 * n), (n - 1) / (2 * n)], [(n - 1) / (2 * n), (1 + n) / (2 * n)]],
-                                     dtype=numpy.complex64)
-        topBoundary = numpy.array([[(1 + n) / 2, -(n - 1) / 2], [-(n - 1) / 2, (1 + n) / 2]], dtype=numpy.complex64)
-        propagation = numpy.array([[numpy.exp(-1j * n * d * 2 * numpy.pi / wavelength), 0],
-                                   [0, numpy.exp(1j * n * d * 2 * numpy.pi / wavelength)]], dtype=numpy.complex64)
+        bottomBoundary = TransferMatrix.boundingLayer(1, n)
+        topBoundary = TransferMatrix.boundingLayer(n, 1)
+        propagation = TransferMatrix.propagationLayer(n, d, wavelength)
 
-        return TransferMatrix.structure(TransferMatrix(bottomBoundary),
-                                        TransferMatrix(propagation),
-                                        TransferMatrix(topBoundary))
+        return TransferMatrix.structure(bottomBoundary,
+                                        propagation,
+                                        topBoundary)
 
     @staticmethod
     def boundingLayer(n1, n2):
@@ -69,9 +67,9 @@ class TransferMatrix:
         :param n1:
         :param n2:
         """
-        leftBoundary = numpy.array([[(n1 + n2) / (2 * n2), (n2 - n1) / (2 * n2)],
+        boundary = numpy.array([[(n1 + n2) / (2 * n2), (n2 - n1) / (2 * n2)],
                                     [(n2 - n1) / (2 * n2), (n1 + n2) / (2 * n2)]], dtype=numpy.complex64)
-        return TransferMatrix(leftBoundary)
+        return TransferMatrix(boundary)
 
     @staticmethod
     def propagationLayer(n, d, wavelength):
