@@ -18,7 +18,11 @@
 
 
 import numpy
+import enum
 
+class Polarization(enum.Enum):
+    s = 0
+    p = 1
 
 class TransferMatrix:
     """
@@ -39,48 +43,66 @@ class TransferMatrix:
         Left to Right = Bottom to Top
         :param args:
         """
-        mat = numpy.identity(2, dtype=numpy.complex64)
+        mat = numpy.identity(2, dtype=numpy.complex128)
         for m in args:
             mat = numpy.dot(m.matrix, mat)
         return TransferMatrix(mat)
 
     @staticmethod
-    def layer(n, d, wavelength):
+    def layer(n, d, wavelength, theta=0, pol=Polarization.s):
         """
         Creates a Air-DielectricLayer-Air Transfer Matrix
         :param n:
         :param d:
         :param wavelength:
         """
-        bottomBoundary = TransferMatrix.boundingLayer(1, n)
-        topBoundary = TransferMatrix.boundingLayer(n, 1)
-        propagation = TransferMatrix.propagationLayer(n, d, wavelength)
+        bottomBoundary = TransferMatrix.boundingLayer(1, n, theta, pol)
+        topBoundary = TransferMatrix.boundingLayer(n, 1, theta, pol)
+        propagation = TransferMatrix.propagationLayer(n, d, wavelength, theta, pol)
 
         return TransferMatrix.structure(bottomBoundary,
                                         propagation,
                                         topBoundary)
 
     @staticmethod
-    def boundingLayer(n1, n2):
+    def boundingLayer(n1, n2, theta=0, pol=Polarization.s):
         """
         Creates a DielectricLayer-DielectricLayer Boundary Transfer Matrix
         :param n1:
         :param n2:
         """
-        boundary = numpy.array([[(n1 + n2) / (2 * n2), (n2 - n1) / (2 * n2)],
-                                    [(n2 - n1) / (2 * n2), (n1 + n2) / (2 * n2)]], dtype=numpy.complex64)
+        theta2 = numpy.arcsin((n1/n2)*numpy.sin(theta))
+
+        # TE
+        if pol is Polarization.s:
+            _n1 = n1*numpy.cos(theta)
+            _n2 = n2*numpy.cos(theta2)
+            a21 = 1
+
+        # TM
+        elif pol is Polarization.p:
+            _n1 = n1/numpy.cos(theta)
+            _n2 = n2/numpy.cos(theta2)
+            a21 = numpy.cos(theta2)/numpy.cos(theta)
+
+
+        boundary = 1/(2 * a21 * _n2) *numpy.array([[(_n1 + _n2), (_n2 - _n1)],
+                                    [(_n2 - _n1), (_n1 + _n2)]], dtype=numpy.complex128)
         return TransferMatrix(boundary)
 
     @staticmethod
-    def propagationLayer(n, d, wavelength):
+    def propagationLayer(n, d, wavelength, theta=0, pol=Polarization.s):
         """
         Creates a Propagation Transfer Matrix, width d, refractive index n
         :param n:
         :param d:
         :param wavelength:
         """
-        propagation = numpy.array([[numpy.exp(-1j * n * d * 2 * numpy.pi / wavelength), 0],
-                                   [0, numpy.exp(1j * n * d * 2 * numpy.pi / wavelength)]], dtype=numpy.complex64)
+        theta2 = numpy.arcsin((1/n)*numpy.sin(theta))
+
+        propagation = numpy.array([[numpy.exp((-1j * n * d * 2 * numpy.pi / wavelength) * numpy.cos(theta2)), 0],
+                                   [0, numpy.exp((1j * n * d * 2 * numpy.pi / wavelength) * numpy.cos(theta2))]],
+                                  dtype=numpy.complex128)
         return TransferMatrix(propagation)
 
     def __init__(self, matrix):
