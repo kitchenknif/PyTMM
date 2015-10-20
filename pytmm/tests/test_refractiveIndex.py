@@ -18,7 +18,8 @@
 
 
 from unittest import TestCase
-from refractiveIndex import *
+
+from pytmm.refractiveIndex import *
 
 
 class TestRefractiveIndex(TestCase):

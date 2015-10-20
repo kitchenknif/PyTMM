@@ -16,8 +16,9 @@
 #
 #   Copyright 2014-2015 Pavel Dmitriev <pavel.a.dmitriev@gmail.com>
 
-from transferMatrix import *
 import matplotlib.pyplot as plt
+
+from pytmm.transferMatrix import *
 from refractiveIndex import *
 
 catalog = RefractiveIndex()

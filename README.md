@@ -3,7 +3,7 @@ Transfer Matrix Method implementation &amp; RefractiveIndex.info database (2015-
 
 ## Installation &amp; Basic Usage
 By default the RefractiveIndex module thinks that it is installed side-by-side with the RefractiveIndex.info database:
-    
+
     .
     +-- _PyTMM
     |   +-- refractiveIndex.py
@@ -21,7 +21,7 @@ In this case, the database can be used as follows:
 
 If your folder structure is different, you just need to specify the path to the RefractiveIndex database:
 
-    catalog = RefractiveIndex("./path/to/folder/with/RefractiveIndex/databae")
+    catalog = RefractiveIndex("./path/to/folder/with/RefractiveIndex/database")
     mat = catalog.getMaterial('main', 'Si', 'Aspnes')
     n = mat.getRefractiveIndex(500))  # wavelength in nanometers
 
@@ -30,11 +30,11 @@ Examples of using the transferMatrix module can be found in
 
     .
     +-- _PyTMM
-    |   +-- _tests
+    |   +-- tests
     |       +-- transferMatrix_tests.py
 
 
-###Dependencies
+## Dependencies
 - numpy
 - scipy
 - pyyaml

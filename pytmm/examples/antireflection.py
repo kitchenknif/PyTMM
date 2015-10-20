@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from transferMatrix import *
+
+from pytmm.transferMatrix import *
 from refractiveIndex import *
 
 n1 = 1.5
