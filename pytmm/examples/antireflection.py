@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from pytmm.transferMatrix import *
-from refractiveIndex import *
 
 n1 = 1.5
 n2 = np.sqrt(n1)

@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from pytmm.transferMatrix import *
-from refractiveIndex import *
 
 n = 2
 d = 600  # slab thickness, nm
