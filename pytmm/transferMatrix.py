@@ -71,7 +71,10 @@ class TransferMatrix:
         :param n1:
         :param n2:
         """
-        theta2 = numpy.arcsin((n1/n2)*numpy.sin(theta))
+        # if numpy.abs((n1/n2)*numpy.sin(theta)) >= 1.0:
+        #     theta2 = numpy.pi/2 * numpy.sign(numpy.sin(theta))
+        # else:
+        theta2 = numpy.arcsin((n1/n2)*numpy.sin(theta), dtype=numpy.complex128)
 
         # TE
         if pol is Polarization.s:
@@ -98,7 +101,7 @@ class TransferMatrix:
         :param d:
         :param wavelength:
         """
-        theta2 = numpy.arcsin((1/n)*numpy.sin(theta))
+        theta2 = numpy.arcsin((1/n)*numpy.sin(theta), dtype=numpy.complex128)
 
         propagation = numpy.array([[numpy.exp((-1j * n * d * 2 * numpy.pi / wavelength) * numpy.cos(theta2)), 0],
                                    [0, numpy.exp((1j * n * d * 2 * numpy.pi / wavelength) * numpy.cos(theta2))]],
