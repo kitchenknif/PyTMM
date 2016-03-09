@@ -16,6 +16,7 @@ a dielectric-dieletric boundary.
 
     from pytmm.transferMatrix import *
 ```
+
 ### Calculations
 
 ```python
