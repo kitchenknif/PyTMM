@@ -20,9 +20,11 @@
 import numpy
 import enum
 
+
 class Polarization(enum.Enum):
     s = 0
     p = 1
+
 
 class TransferMatrix:
     """
@@ -88,8 +90,7 @@ class TransferMatrix:
             _n2 = n2/numpy.cos(theta2)
             a21 = numpy.cos(theta2)/numpy.cos(theta)
 
-
-        boundary = 1/(2 * a21 * _n2) *numpy.array([[(_n1 + _n2), (_n2 - _n1)],
+        boundary = 1/(2 * a21 * _n2) * numpy.array([[(_n1 + _n2), (_n2 - _n1)],
                                     [(_n2 - _n1), (_n1 + _n2)]], dtype=numpy.complex128)
         return TransferMatrix(boundary)
 

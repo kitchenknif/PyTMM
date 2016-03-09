@@ -1,29 +1,27 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from pytmm.transferMatrix import *
+from PyTMM.pytmm.transferMatrix import *
 
 n = 2
-d = 600  # slab thickness, nm
-l = 500  # wavelength, nm
-ran = np.linspace(0, np.pi/2, 1000)
+aoi = np.linspace(0, np.pi/2, 1000)
 TE = []
 TM = []
-for i in ran:
+for i in aoi:
     # TE
-    a = TransferMatrix.layer(n, d, l, i, Polarization.s)
+    a = TransferMatrix.boundingLayer(n, 1, i, Polarization.s)
 
     R, T = solvePropagation(a)
     TE.append(np.abs(R**2))
 
     # TM
-    a = TransferMatrix.layer(n, d, l, i, Polarization.p)
+    a = TransferMatrix.boundingLayer(n, 1, i, Polarization.p)
     R, T = solvePropagation(a)
     TM.append(np.abs(R**2))
 
 
-plt.plot(ran, TE)
-plt.plot(ran, TM)
+plt.plot(aoi, TE)
+plt.plot(aoi, TM)
 plt.xlabel("Angle, rad")
 plt.ylabel("Reflectance")
 plt.title("Angle dependence of reflectivity")
