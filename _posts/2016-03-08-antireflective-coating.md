@@ -8,7 +8,7 @@ order: 1
 Short script to demonstrate the operation of a simple quarter-wavelength
 antireflective coating.
 
-{% highlight python %}
+```python
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -45,4 +45,4 @@ plt.title("Reflectance of ideal single-layer antireflective coating")
 plt.legend(['Substrate', 'Coated substrate'], loc='best')
 plt.show(block=True)
 
-{% endhighlight%}
+```

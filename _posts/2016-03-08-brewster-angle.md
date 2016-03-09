@@ -10,16 +10,15 @@ a dielectric-dieletric boundary.
 
 ### Imports
 
-{% highlight python %}
+```python
     import numpy as np
     import matplotlib.pyplot as plt
 
     from pytmm.transferMatrix import *
-{% endhighlight %}
-
+```
 ### Calculations
 
-{% highlight python %}
+```python
     n = 2
     d = 600  # slab thickness, nm
     l = 500  # wavelength, nm
@@ -38,11 +37,11 @@ a dielectric-dieletric boundary.
         a = TransferMatrix.layer(n, d, l, i, Polarization.p)
         R, T = solvePropagation(a)
         TM.append(np.abs(R**2))
-{% endhighlight %}
+```
 
 ### Plot
 
-{% highlight python %}
+```python
     plt.plot(aoi, TE)
     plt.plot(aoi, TM)
     plt.xlabel("Angle, rad")
@@ -50,4 +49,4 @@ a dielectric-dieletric boundary.
     plt.title("Angle dependence of reflectivity")
     plt.legend(['TE', 'TM'], loc='best')
     plt.show(block=True)
-{% endhighlight %}
+```

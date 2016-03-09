@@ -36,13 +36,10 @@ baseurl: '/PyTMM'
 permalink: none
 
 # Syntax highlighting
-highlighter: pygments
+highlighter: Rouge
 
 # Since these are pages, it doesn't really matter
 future: true
 
 # Exclude non-site files
 exclude: ['bin', 'README.md']
-
-# Use the redcarpet Markdown renderer
-# markdown: redcarpet

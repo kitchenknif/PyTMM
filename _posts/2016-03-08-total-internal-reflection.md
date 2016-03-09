@@ -8,7 +8,7 @@ order: 3
 Script to demonstrate total internal reflection when incident light is coming
 from a medium with a higher refractive index.
 
-{% highlight python%}
+```python
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -40,4 +40,4 @@ plt.title("Angle dependence of reflectivity")
 plt.legend(['TE', 'TM'], loc='best')
 plt.show(block=True)
 
-{% endhighlight%}
+```
