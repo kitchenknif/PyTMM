@@ -1,3 +1,5 @@
+import PyTMM
+
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 # To use a consistent encoding
@@ -16,17 +18,17 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.0-b0',
+    version=PyTMM.__version__,
 
     description='Implementation of the transfer matrix method',
     long_description=long_description,
 
     url='https://github.com/kitchenknif/PyTMM',
 
-    author='Pavel Dmitriev',
+    author=PyTMM.__author__,
     author_email='pavel.a.dmitriev@gmail.com',
 
-    license='GPLv3+',
+    license=PyTMM.__license__,
 
     classifiers=[
         'Development Status :: 5 - Production/Stable',
