@@ -34,8 +34,7 @@ Examples of using the transferMatrix module can be found in
 
     .
     +-- _PyTMM
-    |   +-- tests
-    |       +-- transferMatrix_tests.py
+    |   +-- examples
 
 
 ## Dependencies
