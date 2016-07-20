@@ -260,7 +260,15 @@ class FormulaRefractiveIndexData:
                     nsq += g(coefficients[i], coefficients[i + 1], wavelength)
                 n = numpy.sqrt(nsq)
             elif formula_type == 4:  # RefractiveIndex.INFO
-                raise FormulaNotImplemented('RefractiveIndex.INFO formula not yet implemented')
+                g1 = lambda c1, c2, c3, c4, w: c1 * w**c2 / (w**2 - c3**c4)
+                g2 = lambda c1, c2, w: c1 * w**c2
+                nsq = coefficients[0]
+                for i in range(1, min(8, len(coefficients)), 4):
+                    nsq += g1(coefficients[i], coefficients[i+1], coefficients[i+2], coefficients[i+3], wavelength)
+                if len(coefficients) > 9:
+                    for i in range(9, len(coefficients), 2):
+                        nsq += g2(coefficients[i], coefficients[i+1], wavelength)
+                n = numpy.sqrt(nsq)
             elif formula_type == 5:  # Cauchy
                 g = lambda c1, c2, w: c1 * w ** c2
                 n = coefficients[0]
@@ -272,7 +280,13 @@ class FormulaRefractiveIndexData:
                 for i in range(1, len(coefficients), 2):
                     n += g(coefficients[i], coefficients[i + 1], wavelength)
             elif formula_type == 7:  # Herzberger
-                raise FormulaNotImplemented('Herzberger formula not yet implemented')
+                g1 = lambda c1, w, p: c1 / (w**2 - 0.028)**p
+                g2 = lambda c1, w, p: c1 * w**p
+                n = coefficients[0]
+                n += g1(coefficients[1], wavelength, 1)
+                n += g1(coefficients[2], wavelength, 2)
+                for i in range(3, len(coefficients)):
+                    n += g2(coefficients[i], wavelength, 2*(i-2))
             elif formula_type == 8:  # Retro
                 raise FormulaNotImplemented('Retro formula not yet implemented')
             elif formula_type == 9:  # Exotic
