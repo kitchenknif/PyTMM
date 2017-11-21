@@ -80,7 +80,7 @@ class RefractiveIndex:
                                 if 'DIVIDER' not in p:
                                     if p['PAGE'] == page:
                                         # print("From {0} opening {1}, {2}\n".format(sh['name'], b['name'], p['name']))
-                                        filename = os.path.join(self.referencePath, os.path.normpath(p['path']))
+                                        filename = os.path.join(self.referencePath, 'data', os.path.normpath(p['data']))
                                         # print("Located at {}".format(filename))
         assert filename != ''
         return filename
