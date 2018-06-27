@@ -153,8 +153,11 @@ class Material:
 
                 formula = int((data['type'].split())[1])
                 coefficents = [float(s) for s in data['coefficients'].split()]
-                rangeMin = float(data['range'].split()[0])
-                rangeMax = float(data['range'].split()[1])
+                for k in ['range','wavelength_range']:
+                    if k in data:
+                        break
+                rangeMin = float(data[k].split()[0])
+                rangeMax = float(data[k].split()[1])
 
                 self.refractiveIndex = RefractiveIndexData.setupRefractiveIndex(formula=formula,
                                                                                 rangeMin=rangeMin,
