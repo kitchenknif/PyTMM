@@ -23,14 +23,40 @@ from PyTMM.refractiveIndex import *
 
 
 class TestRefractiveIndex(TestCase):
+
     def test_defaultInit(self):
-        database = RefractiveIndex()
-        assert os.path.exists(database.referencePath)
-        assert os.path.exists(os.path.join(database.referencePath, os.path.normpath("library.yml")))
-        assert os.path.isfile(os.path.join(database.referencePath, os.path.normpath("library.yml")))
+
+        try:
+            database = RefractiveIndex()
+        except FileNotFoundError:
+            print("database not found at default location, checking custom location from \'./refractiveindex_database_location.txt\'")
+            database_path = ""
+            with open("refractiveindex_database_location.txt", "r") as f:
+                database_path = f.readline()
+
+            database = RefractiveIndex(databasePath=database_path)
+        else:
+            assert os.path.exists(database.referencePath)
+            assert os.path.exists(os.path.join(database.referencePath, os.path.normpath("library.yml")))
+            assert os.path.isfile(os.path.join(database.referencePath, os.path.normpath("library.yml")))
+
+        finally:
+            assert os.path.exists(database.referencePath)
+            assert os.path.exists(os.path.join(database.referencePath, os.path.normpath("library.yml")))
+            assert os.path.isfile(os.path.join(database.referencePath, os.path.normpath("library.yml")))
+
 
     def test_getMaterialFilename(self):
-        database = RefractiveIndex()
+        try:
+            database = RefractiveIndex()
+        except FileNotFoundError:
+            print("database not found at default location, checking custom location from \'./refractiveindex_database_location.txt\'")
+            database_path = ""
+            with open("refractiveindex_database_location.txt", "r") as f:
+                database_path = f.readline()
+
+            database = RefractiveIndex(databasePath=database_path)
+
         for sh in database.catalog:
             for b in sh['content']:
                 if 'DIVIDER' not in b:
@@ -41,7 +67,16 @@ class TestRefractiveIndex(TestCase):
                             assert os.path.isfile(os.path.normpath(mat))
 
     def test_getMaterial(self):
-        database = RefractiveIndex()
+        try:
+            database = RefractiveIndex()
+        except FileNotFoundError:
+            print("database not found at default location, checking custom location from \'./refractiveindex_database_location.txt\'")
+            database_path = ""
+            with open("refractiveindex_database_location.txt", "r") as f:
+                database_path = f.readline()
+
+            database = RefractiveIndex(databasePath=database_path)
+
         for sh in database.catalog:
             for b in sh['content']:
                 if 'DIVIDER' not in b:
