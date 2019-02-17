@@ -23,6 +23,7 @@ import sys
 import argparse
 import numpy
 import scipy.interpolate
+from io import open
 
 
 # import collections
@@ -38,10 +39,9 @@ class RefractiveIndex:
         :param databasePath:
         """
         self.referencePath = os.path.normpath(databasePath)
-        f = open(os.path.join(self.referencePath, os.path.normpath("library.yml")), "r")
-        # print(f)
-        self.catalog = yaml.safe_load(f)
-        f.close()
+        fileName = os.path.join(self.referencePath, os.path.normpath("library.yml"))
+        with open(fileName, "rt", encoding="utf-8") as f:
+            self.catalog = yaml.safe_load(f)
 
         # TODO: Do i NEED namedtuples, or am i just wasting time?
         # Shelf = collections.namedtuple('Shelf', ['SHELF', 'name', 'books'])
@@ -107,9 +107,8 @@ class Material:
         self.refractiveIndex = None
         self.extinctionCoefficient = None
 
-        f = open(filename)
-        material = yaml.safe_load(f)
-        f.close()
+        with open(filename, "rt", encoding="utf-8") as f:
+            material = yaml.safe_load(f)
 
         for data in material['DATA']:
             if (data['type'].split())[0] == 'tabulated':
