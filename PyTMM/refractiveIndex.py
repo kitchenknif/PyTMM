@@ -36,8 +36,7 @@ except ImportError:
 class RefractiveIndex:
     """Class that parses the refractiveindex.info YAML database"""
 
-    def __init__(self, databasePath=os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                                 os.path.normpath("../RefractiveIndex/"))):
+    def __init__(self, databasePath=os.path.join(os.path.expanduser("~"), "refractiveindex.info-database")):
         """
 
         :param databasePath:
