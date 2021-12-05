@@ -163,7 +163,7 @@ class Material:
                                                                                 rangeMax=rangeMax,
                                                                                 coefficients=coefficents)
 
-    def getRefractiveIndex(self, wavelength):
+    def getRefractiveIndex(self, wavelength, bounds_error=True):
         """
 
         :param wavelength:
@@ -172,9 +172,9 @@ class Material:
         if self.refractiveIndex is None:
             raise Exception('No refractive index specified for this material')
         else:
-            return self.refractiveIndex.getRefractiveIndex(wavelength)
+            return self.refractiveIndex.getRefractiveIndex(wavelength, bounds_error=bounds_error)
 
-    def getExtinctionCoefficient(self, wavelength):
+    def getExtinctionCoefficient(self, wavelength, bounds_error=True):
         """
 
         :param wavelength:
@@ -183,7 +183,7 @@ class Material:
         if self.extinctionCoefficient is None:
             raise NoExtinctionCoefficient('No extinction coefficient specified for this material')
         else:
-            return self.extinctionCoefficient.getExtinctionCoefficient(wavelength)
+            return self.extinctionCoefficient.getExtinctionCoefficient(wavelength, bounds_error=bounds_error)
 
 
 #
@@ -232,14 +232,14 @@ class FormulaRefractiveIndexData:
         self.rangeMax = rangeMax
         self.coefficients = coefficients
 
-    def getRefractiveIndex(self, wavelength):
+    def getRefractiveIndex(self, wavelength, bounds_error=True):
         """
 
         :param wavelength:
         :return: :raise Exception:
         """
         wavelength /= 1000.0
-        if self.rangeMin <= numpy.min(wavelength) <= self.rangeMax and self.rangeMin <= numpy.max(wavelength) <= self.rangeMax:
+        if self.rangeMin <= numpy.min(wavelength) <= self.rangeMax and self.rangeMin <= numpy.max(wavelength) <= self.rangeMax or not bounds_error:
             formula_type = self.formula
             coefficients = self.coefficients
             n = 0
@@ -296,6 +296,7 @@ class FormulaRefractiveIndexData:
             else:
                 raise Exception('Bad formula type')
 
+            n = numpy.where((self.rangeMin<=wavelength) & (wavelength<=self.rangeMax), n, numpy.nan)
             return n
         else:
             raise Exception(
@@ -318,9 +319,9 @@ class TabulatedRefractiveIndexData:
         if self.rangeMin == self.rangeMax:
             self.refractiveFunction = values[0]
         else:
-            self.refractiveFunction = scipy.interpolate.interp1d(wavelengths, values)
+            self.refractiveFunction = scipy.interpolate.interp1d(wavelengths, values, bounds_error=False)
 
-    def getRefractiveIndex(self, wavelength):
+    def getRefractiveIndex(self, wavelength, bounds_error=True):
         """
 
         :param wavelength:
@@ -329,7 +330,7 @@ class TabulatedRefractiveIndexData:
         wavelength /= 1000.0
         if self.rangeMin == self.rangeMax and self.rangeMin == wavelength:
             return self.refractiveFunction
-        elif self.rangeMin <= numpy.min(wavelength) <= self.rangeMax and self.rangeMin <= numpy.max(wavelength) <= self.rangeMax and self.rangeMin != self.rangeMax:
+        elif self.rangeMin <= numpy.min(wavelength) <= self.rangeMax and self.rangeMin <= numpy.max(wavelength) <= self.rangeMax and self.rangeMin != self.rangeMax or not bounds_error:
             return self.refractiveFunction(wavelength)
         else:
             raise Exception(
@@ -359,18 +360,18 @@ class ExtinctionCoefficientData:
         :param wavelengths:
         :param coefficients:
         """
-        self.extCoeffFunction = scipy.interpolate.interp1d(wavelengths, coefficients)
+        self.extCoeffFunction = scipy.interpolate.interp1d(wavelengths, coefficients, bounds_error=False)
         self.rangeMin = numpy.min(wavelengths)
         self.rangeMax = numpy.max(wavelengths)
 
-    def getExtinctionCoefficient(self, wavelength):
+    def getExtinctionCoefficient(self, wavelength, bounds_error=True):
         """
 
         :param wavelength:
         :return: :raise Exception:
         """
         wavelength /= 1000.0
-        if self.rangeMin <= numpy.min(wavelength) <= self.rangeMax and self.rangeMin <= numpy.max(wavelength) <= self.rangeMax:
+        if self.rangeMin <= numpy.min(wavelength) <= self.rangeMax and self.rangeMin <= numpy.max(wavelength) <= self.rangeMax or not bounds_error:
             return self.extCoeffFunction(wavelength)
         else:
             raise Exception(
