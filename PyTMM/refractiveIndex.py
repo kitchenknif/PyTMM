@@ -33,13 +33,25 @@ class RefractiveIndex:
     """Class that parses the refractiveindex.info YAML database"""
 
     def __init__(self, databasePath=os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                                 os.path.normpath("../RefractiveIndex/"))):
+                                                 os.path.normpath("../RefractiveIndex/")), auto_download=True):
         """
 
         :param databasePath:
         """
+
+        if not os.path.exists(databasePath) and auto_download:
+          import tempfile, urllib.request, zipfile, shutil
+          with tempfile.TemporaryDirectory() as tempdir:
+            zip_filename = os.path.join(tempdir, "db.zip")
+            print("downloading refractiveindex.info database...", file=sys.stderr)
+            urllib.request.urlretrieve('https://github.com/polyanskiy/refractiveindex.info-database/archive/refs/heads/master.zip', zip_filename)
+            print("extracting...", file=sys.stderr)
+            with zipfile.ZipFile(zip_filename, 'r') as zf: zf.extractall(tempdir)
+            shutil.move(os.path.join(tempdir, "refractiveindex.info-database-master", "database"), databasePath)
+            print("done", file=sys.stderr)
+
         self.referencePath = os.path.normpath(databasePath)
-        fileName = os.path.join(self.referencePath, os.path.normpath("library.yml"))
+        fileName = os.path.join(self.referencePath, "library.yml")
         with open(fileName, "rt", encoding="utf-8") as f:
             self.catalog = yaml.safe_load(f)
 
