@@ -25,6 +25,10 @@ import numpy
 import scipy.interpolate
 from io import open
 
+try:
+    from yaml import CBaseLoader as BaseLoader
+except ImportError:
+    from yaml import BaseLoader
 
 # import collections
 
@@ -32,8 +36,7 @@ from io import open
 class RefractiveIndex:
     """Class that parses the refractiveindex.info YAML database"""
 
-    def __init__(self, databasePath=os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                                 os.path.normpath("../RefractiveIndex/")), auto_download=True):
+    def __init__(self, databasePath=os.path.join(os.path.expanduser("~"), "refractiveindex.info-database"), auto_download=True):
         """
 
         :param databasePath:
@@ -53,7 +56,7 @@ class RefractiveIndex:
         self.referencePath = os.path.normpath(databasePath)
         fileName = os.path.join(self.referencePath, "library.yml")
         with open(fileName, "rt", encoding="utf-8") as f:
-            self.catalog = yaml.safe_load(f)
+            self.catalog = yaml.load(f, Loader=BaseLoader)
 
         # TODO: Do i NEED namedtuples, or am i just wasting time?
         # Shelf = collections.namedtuple('Shelf', ['SHELF', 'name', 'books'])
@@ -120,7 +123,7 @@ class Material:
         self.extinctionCoefficient = None
 
         with open(filename, "rt", encoding="utf-8") as f:
-            material = yaml.safe_load(f)
+            material = yaml.load(f, Loader=BaseLoader)
 
         for data in material['DATA']:
             if (data['type'].split())[0] == 'tabulated':
