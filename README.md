@@ -1,6 +1,8 @@
 # PyTMM
 Transfer Matrix Method implementation &amp; RefractiveIndex.info database (2015-05-24) browser
 
+Citations: [![DOI](https://zenodo.org/badge/39225589.svg)](https://zenodo.org/badge/latestdoi/39225589)
+
 ## Documentation
 Extended documentation can be found at  [kitchenknif.github.io/PyTMM](https://kitchenknif.github.io/PyTMM)
 
