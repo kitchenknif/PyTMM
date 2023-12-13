@@ -253,7 +253,7 @@ class FormulaRefractiveIndexData:
         :param wavelength:
         :return: :raise Exception:
         """
-        wavelength /= 1000.0
+        wavelength = wavelength / 1000.0
         if self.rangeMin <= numpy.min(wavelength) <= self.rangeMax and self.rangeMin <= numpy.max(wavelength) <= self.rangeMax or not bounds_error:
             formula_type = self.formula
             coefficients = self.coefficients
@@ -385,7 +385,7 @@ class ExtinctionCoefficientData:
         :param wavelength:
         :return: :raise Exception:
         """
-        wavelength /= 1000.0
+        wavelength = wavelength / 1000.0
         if self.rangeMin <= numpy.min(wavelength) <= self.rangeMax and self.rangeMin <= numpy.max(wavelength) <= self.rangeMax or not bounds_error:
             return self.extCoeffFunction(wavelength)
         else:
