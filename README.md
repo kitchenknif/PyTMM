@@ -3,6 +3,9 @@ Transfer Matrix Method implementation &amp; RefractiveIndex.info database (2015-
 
 Citations: [![DOI](https://zenodo.org/badge/39225589.svg)](https://zenodo.org/badge/latestdoi/39225589)
 
+## RefractiveIndex.info module as a separate package:
+[https://github.com/toftul/refractiveindex](https://github.com/toftul/refractiveindex)
+
 ## Documentation
 Extended documentation can be found at  [kitchenknif.github.io/PyTMM](https://kitchenknif.github.io/PyTMM)
 
